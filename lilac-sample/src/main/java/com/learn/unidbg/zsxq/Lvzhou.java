@@ -1,60 +1,94 @@
 package com.learn.unidbg.zsxq;
 
+/*
+package com.weibo.xvideo;
+
+import org.jetbrains.annotations.NotNull;
+
+public final class NativeApi {
+    public NativeApi() {
+        System.loadLibrary("oasiscore");
+    }
+
+    @NotNull
+    public final native String d(@NotNull String str);
+
+    @NotNull
+    public final native String dg(@NotNull String str, boolean z);
+
+    @NotNull
+    public final native String e(@NotNull String str);
+
+    @NotNull
+    public final native String s(@NotNull byte[] bArr, boolean z);
+}
+
+ */
+
+
+/*
+
+Java.perform(function() {
+  function stringToBytes(str) {
+    var javaString = Java.use('java.lang.String');
+    return javaString.$new(str).getBytes();
+  }
+
+  let NativeApi = Java.use("com.weibo.xvideo.NativeApi");
+  let arg1 = "aid=01A-khBWIm48A079Pz_DMW6PyZR8uyTumcCNm4e8awxyC2ANU.&cfrom=28B5295010&cuid=5999578300&noncestr=46274W9279Hr1X49A5X058z7ZVz024&platform=ANDROID&timestamp=1621437643609&ua=Xiaomi-MIX2S__oasis__3.5.8__Android__Android10&version=3.5.8&vid=1019013594003&wm=20004_90024";
+  let arg2 = false;
+  let ret = NativeApi.$new().s(stringToBytes(arg1), arg2);
+  console.log("ret:"+ret);
+})
+ */
+
 import com.github.unidbg.AndroidEmulator;
-import com.github.unidbg.Module;
-import com.github.unidbg.arm.backend.DynarmicFactory;
 import com.github.unidbg.linux.android.AndroidEmulatorBuilder;
 import com.github.unidbg.linux.android.AndroidResolver;
-import com.github.unidbg.linux.android.dvm.AbstractJni;
-import com.github.unidbg.linux.android.dvm.DvmObject;
-import com.github.unidbg.linux.android.dvm.VM;
+import com.github.unidbg.linux.android.dvm.*;
 import com.github.unidbg.memory.Memory;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 
-public class Lvzhou  extends AbstractJni {
+public class Lvzhou extends AbstractJni {
+    AndroidEmulator androidEmulator;
+
+    VM vm;
+
+
+    Memory memory;
+    DalvikModule dm;
+
 
     public void run() {
-        //1.创建Android模拟器实例
-        AndroidEmulator emulator = AndroidEmulatorBuilder
-                .for32Bit().setProcessName("com.sina.oasis")
-                .addBackendFactory(new DynarmicFactory(true))
-                .build();
 
-        //2.获取操作内存的接口
-        Memory memory = emulator.getMemory();
 
-        //3.设置库解析器(SDK版本)
+        androidEmulator = AndroidEmulatorBuilder.for32Bit().setProcessName("com.weibo.xvideo.NativeApi").build();
+
+        vm = androidEmulator.createDalvikVM(new File("lilac-sample/src/main/resources/lvzhou.apk"));
+        vm.setJni(this);
+        vm.setVerbose(true);
+
+
+        memory = androidEmulator.getMemory();
         memory.setLibraryResolver(new AndroidResolver(23));
 
-        //4.创建虚拟机
-        VM vm = emulator.createDalvikVM(new File("lilac-sample/src/main/resources/lvzhou.apk"));
-        vm.setJni(this);
 
-        //5.加载ELF文件
-        Module module = emulator.loadLibrary(new File("lilac-sample/src/main/resources/liboasiscore.so"), true);
+        dm = vm.loadLibrary("oasiscore", true);
+        dm.callJNI_OnLoad(androidEmulator);
 
-        //6.调用JNI_OnLoad
-        vm.callJNI_OnLoad(emulator, module);
-
-
-        //7.模拟执行目标函数
-        //创建一个类的实例对象
-        DvmObject<?> obj = vm.resolveClass("com/weibo/xvideo/NativeApi").newObject(null);
         String arg1 = "aid=01A-khBWIm48A079Pz_DMW6PyZR8uyTumcCNm4e8awxyC2ANU.&cfrom=28B5295010&cuid=5999578300&noncestr=46274W9279Hr1X49A5X058z7ZVz024&platform=ANDROID&timestamp=1621437643609&ua=Xiaomi-MIX2S__oasis__3.5.8__Android__Android10&version=3.5.8&vid=1019013594003&wm=20004_90024";
-        String result= obj.callJniMethodObject(emulator,"s([BZ)Ljava/lang/String;",arg1.getBytes(StandardCharsets.UTF_8),false).toString();
-
-
-        //9.打印执行结果
-        System.out.println("执行结果:" + result);
+        DvmObject<?> obj = vm.resolveClass("com.weibo.xvideo.NativeApi").newObject(null);
+        String result = obj.callJniMethodObject(androidEmulator, "s([BZ)Ljava/lang/String;", arg1.getBytes(StandardCharsets.UTF_8), false).getValue().toString();
+        System.out.printf(String.format("result %s", result));
     }
-
-
-
 
 
     public static void main(String[] args) {
+
         new Lvzhou().run();
     }
+
+
 }
