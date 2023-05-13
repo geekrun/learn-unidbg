@@ -26,11 +26,12 @@ import com.github.unidbg.linux.android.AndroidEmulatorBuilder;
 import com.github.unidbg.linux.android.AndroidResolver;
 import com.github.unidbg.linux.android.dvm.*;
 import com.github.unidbg.memory.Memory;
+import com.learn.unidbg.extend.SuperExtendAbstractJni;
+import com.learn.unidbg.extend.utils.ExtendFileUtils;
 
-import java.io.File;
 import java.nio.charset.StandardCharsets;
 
-public class Zuiyou extends AbstractJni {
+public class Zuiyou extends SuperExtendAbstractJni {
     AndroidEmulator androidEmulator;
 
     VM vm = null;
@@ -43,7 +44,7 @@ public class Zuiyou extends AbstractJni {
 
         androidEmulator = AndroidEmulatorBuilder.for32Bit().setProcessName("cn.xiaochuankeji.tieba").build();
 
-        vm = androidEmulator.createDalvikVM(new File("lilac-sample/src/main/resources/right573.apk"));
+        vm = androidEmulator.createDalvikVM(ExtendFileUtils.loadApkFile("zuiyou.5.7.3.apk"));
         vm.setJni(this);
         vm.setVerbose(true);
         memory = androidEmulator.getMemory();
@@ -59,7 +60,7 @@ public class Zuiyou extends AbstractJni {
 
         System.out.printf(String.format("result======= %s", result));
 
-
+        printApkInfo(vm);
     }
 
     @Override
@@ -105,17 +106,6 @@ public class Zuiyou extends AbstractJni {
 
 
     @Override
-    public boolean callStaticBooleanMethodV(BaseVM vm, DvmClass dvmClass, String signature, VaList vaList) {
-        switch (signature) {
-            case "android/os/Debug->isDebuggerConnected()Z": {
-                return false;
-            }
-        }
-        return super.callStaticBooleanMethodV(vm, dvmClass, signature, vaList);
-    }
-
-
-    @Override
     public int callStaticIntMethodV(BaseVM vm, DvmClass dvmClass, String signature, VaList vaList) {
 
         switch (signature) {
@@ -131,6 +121,7 @@ public class Zuiyou extends AbstractJni {
     public static void main(String[] args) {
 
         new Zuiyou().run();
+
     }
 
 

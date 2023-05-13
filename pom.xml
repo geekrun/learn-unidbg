@@ -6,6 +6,7 @@
     <modules>
         <module>lilac-sample</module>
         <module>other-sample</module>
+        <module>common-extend</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

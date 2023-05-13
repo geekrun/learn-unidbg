@@ -9,6 +9,7 @@ import com.github.unidbg.linux.android.AndroidResolver;
 import com.github.unidbg.linux.android.dvm.*;
 import com.github.unidbg.linux.android.dvm.array.ByteArray;
 import com.github.unidbg.memory.Memory;
+import com.learn.unidbg.extend.utils.ExtendFileUtils;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
@@ -30,7 +31,7 @@ public class Oasis extends AbstractJni{
         // 设置系统类库解析
         memory.setLibraryResolver(new AndroidResolver(23));
         // 创建Android虚拟机,传入APK，Unidbg可以替我们做部分签名校验的工作
-        vm = emulator.createDalvikVM(new File("lilac-sample/src/main/resources/lvzhou.apk"));
+        vm = emulator.createDalvikVM(ExtendFileUtils.loadApkFile("lvzhou3.5.8.apk"));
         // 加载目标SO
         DalvikModule dm = vm.loadLibrary("oasiscore", true); // 加载so到虚拟内存
         //获取本SO模块的句柄,后续需要用它

@@ -45,13 +45,16 @@ Java.perform(function() {
 import com.github.unidbg.AndroidEmulator;
 import com.github.unidbg.linux.android.AndroidEmulatorBuilder;
 import com.github.unidbg.linux.android.AndroidResolver;
-import com.github.unidbg.linux.android.dvm.*;
+import com.github.unidbg.linux.android.dvm.DalvikModule;
+import com.github.unidbg.linux.android.dvm.DvmObject;
+import com.github.unidbg.linux.android.dvm.VM;
 import com.github.unidbg.memory.Memory;
+import com.learn.unidbg.extend.SuperExtendAbstractJni;
+import com.learn.unidbg.extend.utils.ExtendFileUtils;
 
-import java.io.File;
 import java.nio.charset.StandardCharsets;
 
-public class Lvzhou extends AbstractJni {
+public class Lvzhou extends SuperExtendAbstractJni {
     AndroidEmulator androidEmulator;
 
     VM vm;
@@ -66,7 +69,7 @@ public class Lvzhou extends AbstractJni {
 
         androidEmulator = AndroidEmulatorBuilder.for32Bit().setProcessName("com.weibo.xvideo.NativeApi").build();
 
-        vm = androidEmulator.createDalvikVM(new File("lilac-sample/src/main/resources/lvzhou.apk"));
+        vm = androidEmulator.createDalvikVM(ExtendFileUtils.loadApkFile("lvzhou3.5.8.apk"));
         vm.setJni(this);
         vm.setVerbose(true);
 
@@ -82,6 +85,7 @@ public class Lvzhou extends AbstractJni {
         DvmObject<?> obj = vm.resolveClass("com.weibo.xvideo.NativeApi").newObject(null);
         String result = obj.callJniMethodObject(androidEmulator, "s([BZ)Ljava/lang/String;", arg1.getBytes(StandardCharsets.UTF_8), false).getValue().toString();
         System.out.printf(String.format("result %s", result));
+        printApkInfo(vm);
     }
 
 

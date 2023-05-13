@@ -22,13 +22,15 @@ import com.github.unidbg.arm.context.Arm32RegisterContext;
 import com.github.unidbg.debugger.BreakPointCallback;
 import com.github.unidbg.linux.android.AndroidEmulatorBuilder;
 import com.github.unidbg.linux.android.AndroidResolver;
-import com.github.unidbg.linux.android.dvm.*;
+import com.github.unidbg.linux.android.dvm.DalvikModule;
+import com.github.unidbg.linux.android.dvm.DvmObject;
+import com.github.unidbg.linux.android.dvm.VM;
 import com.github.unidbg.memory.Memory;
+import com.learn.unidbg.extend.SuperExtendAbstractJni;
+import com.learn.unidbg.extend.utils.ExtendFileUtils;
 import unicorn.ArmConst;
 
-import java.io.File;
-
-public class Weibo extends AbstractJni {
+public class Weibo extends SuperExtendAbstractJni {
     AndroidEmulator androidEmulator;
 
     VM vm = null;
@@ -44,7 +46,7 @@ public class Weibo extends AbstractJni {
         memory = androidEmulator.getMemory();
         memory.setLibraryResolver(new AndroidResolver(23));
 
-        vm = androidEmulator.createDalvikVM(new File("lilac-sample/src/main/resources/sinaInternational.apk"));
+        vm = androidEmulator.createDalvikVM(ExtendFileUtils.loadApkFile("com.weico.internationa.1.7.1.apk"));
         vm.setVerbose(true);
         vm.setJni(this);
 
@@ -75,23 +77,10 @@ public class Weibo extends AbstractJni {
         String result = obj.callJniMethodObject(androidEmulator, "calculateS", context, arg2, arg3).getValue().toString();
 
         System.out.printf(String.format("result======= %s", result));
+
+        printApkInfo(vm);
     }
 
-
-    @Override
-    public DvmObject<?> callObjectMethod(BaseVM vm, DvmObject<?> dvmObject, String signature, VarArg varArg) {
-
-
-        switch (signature) {
-
-            case "android/content/ContextWrapper->getPackageManager()Landroid/content/pm/PackageManager;":
-                return vm.resolveClass("android/content/pm/PackageManager").newObject(null);
-
-
-        }
-
-        return super.callObjectMethod(vm, dvmObject, signature, varArg);
-    }
 
 
     public static void main(String[] args) {

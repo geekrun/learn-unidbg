@@ -43,19 +43,19 @@ import com.github.unidbg.file.IOResolver;
 import com.github.unidbg.linux.android.AndroidEmulatorBuilder;
 import com.github.unidbg.linux.android.AndroidResolver;
 import com.github.unidbg.linux.android.dvm.*;
-import com.github.unidbg.linux.android.dvm.jni.ProxyDvmClass;
 import com.github.unidbg.linux.android.dvm.jni.ProxyDvmObject;
 import com.github.unidbg.linux.file.ByteArrayFileIO;
 import com.github.unidbg.memory.Memory;
+import com.learn.unidbg.extend.SuperExtendAbstractJni;
+import com.learn.unidbg.extend.utils.ExtendFileUtils;
 import com.learn.unidbg.liac.util.SignedQuery;
 
-import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.TreeMap;
 
 
-public class Bili extends AbstractJni implements IOResolver {
+public class Bili extends SuperExtendAbstractJni implements IOResolver {
 
 
     AndroidEmulator androidEmulator;
@@ -73,8 +73,7 @@ public class Bili extends AbstractJni implements IOResolver {
         androidEmulator.getBackend().registerEmuCountHook(10000); // 设置执行多少条指令切换一次线程
         androidEmulator.getSyscallHandler().setEnableThreadDispatcher(true);
         androidEmulator.getSyscallHandler().addIOResolver(this);
-        vm = androidEmulator.createDalvikVM(new File("lilac-sample/src/main/resources/bilibili.apk"));
-
+        vm = androidEmulator.createDalvikVM(ExtendFileUtils.loadApkFile("tv.danmaku.bili.6.18.0.apk"));
         vm.setJni(this);
         vm.setVerbose(true);
         memory = androidEmulator.getMemory();
@@ -93,37 +92,15 @@ public class Bili extends AbstractJni implements IOResolver {
         String result = dvmClass.callStaticJniMethodObject(androidEmulator, "s(Ljava/util/SortedMap;)Lcom/bilibili/nativelibrary/SignedQuery;", ProxyDvmObject.createObject(vm, map)).getValue().toString();
         System.out.printf(String.format("result======= %s", result));
 
+        printApkInfo(vm);
 
     }
 
 
-    @Override
-    public boolean callBooleanMethod(BaseVM vm, DvmObject<?> dvmObject, String signature, VarArg varArg) {
-        switch (signature) {
-            case "java/util/Map->isEmpty()Z":
-                Map map = (Map) dvmObject.getValue();
-                return map.isEmpty();
-        }
-        return super.callBooleanMethod(vm, dvmObject, signature, varArg);
-    }
 
 
-    @Override
-    public DvmObject<?> callObjectMethod(BaseVM vm, DvmObject<?> dvmObject, String signature, VarArg varArg) {
-        switch (signature) {
-            case "java/util/Map->get(Ljava/lang/Object;)Ljava/lang/Object;":
-                Map map = (Map) dvmObject.getValue();
-                var key = varArg.getObjectArg(0).getValue();
-                return ProxyDvmObject.createObject(vm, map.get(key));
-            case "java/util/Map->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;":
-                Map map1 = (Map) dvmObject.getValue();
-                var key1 = varArg.getObjectArg(0).getValue();
-                var val1 = varArg.getObjectArg(1).getValue();
-                return ProxyDvmObject.createObject(vm, map1.put(key1, val1));
 
-        }
-        return super.callObjectMethod(vm, dvmObject, signature, varArg);
-    }
+
 
 
     @Override
@@ -134,7 +111,6 @@ public class Bili extends AbstractJni implements IOResolver {
                 Map map = (Map) varArg.getObjectArg(0).getValue();
                 var rr = SignedQuery.m79203c(map);
                 return new StringObject(vm, rr);
-
 
         }
         return super.callStaticObjectMethod(vm, dvmClass, signature, varArg);
@@ -147,7 +123,7 @@ public class Bili extends AbstractJni implements IOResolver {
             case "com/bilibili/nativelibrary/SignedQuery-><init>(Ljava/lang/String;Ljava/lang/String;)V":
                 String arg1 = varArg.getObjectArg(0).getValue().toString();
                 String arg2 = varArg.getObjectArg(1).getValue().toString();
-                return vm.resolveClass("com/bilibili/nativelibrary/SignedQuery").newObject(new SignedQuery(arg1, arg2));
+                return dvmClass.newObject(new SignedQuery(arg1, arg2));
 
         }
 
