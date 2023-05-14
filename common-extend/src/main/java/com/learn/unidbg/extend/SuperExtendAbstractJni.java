@@ -10,8 +10,6 @@ public class SuperExtendAbstractJni extends AndroidEnvJni {
 
 
 
-
-
     public void printApkInfo(VM vm){
 
         var map= new HashMap<String,String>();

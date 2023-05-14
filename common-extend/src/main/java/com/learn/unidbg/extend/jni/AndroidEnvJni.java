@@ -5,6 +5,14 @@ import com.github.unidbg.linux.android.dvm.*;
 public class AndroidEnvJni extends StandardJavaJni {
 
 
+    @Override
+    public int getStaticIntField(BaseVM vm, DvmClass dvmClass, String signature) {
+        switch (signature){
+            case "android/os/Build$VERSION->SDK_INT:I":
+                return 29;
+        }
+        return super.getStaticIntField(vm, dvmClass, signature);
+    }
 
     @Override
     public boolean callStaticBooleanMethodV(BaseVM vm, DvmClass dvmClass, String signature, VaList vaList) {

@@ -63,6 +63,12 @@ public class StandardJavaJni extends AbstractJni {
             case "java/lang/StringBuilder->toString()Ljava/lang/String;":
                 StringBuilder stringBuilder= (StringBuilder) dvmObject.getValue();
                 return  new StringObject(vm,stringBuilder.toString());
+            case "java/lang/StringBuilder->append(I)Ljava/lang/StringBuilder;":
+                return ProxyDvmObject.createObject(vm, ((StringBuilder) dvmObject.getValue()).append(vaList.getIntArg(0)));
+
+//            case "java/lang/StringBuilder->append(C)Ljava/lang/StringBuilder;":
+
+
         }
         return super.callObjectMethodV(vm, dvmObject, signature, vaList);
     }
