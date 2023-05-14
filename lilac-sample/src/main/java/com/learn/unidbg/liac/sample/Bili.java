@@ -1,4 +1,4 @@
-package com.learn.unidbg.liac.call_jni.simple;
+package com.learn.unidbg.liac.sample;
 
 
 /*
