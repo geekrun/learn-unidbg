@@ -6,11 +6,11 @@ public class ExtendFileUtils {
 
 
     public static File loadApkFile(String apkName){
-        return new File("lilac-sample/src/main/resources/apk/"+apkName);
+        return loadApkFile(apkName,"apk");
     }
 
 
     public static File loadApkFile(String apkName,String apkType){
-        return new File(String.format("lilac-sample/src/main/resources/%s/%s", apkType,apkName));
+        return new File(String.format("common-extend/src/main/resources/%s/%s", apkType,apkName));
     }
 }
