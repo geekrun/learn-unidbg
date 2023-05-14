@@ -1,4 +1,4 @@
-package com.learn.unidbg.liac.dachang.dianping;
+package com.learn.unidbg.dachang.dianping;
 
 import com.github.unidbg.AndroidEmulator;
 import com.github.unidbg.Emulator;

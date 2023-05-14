@@ -1,4 +1,4 @@
-package com.learn.unidbg.liac.teaching.syscall;
+package com.learn.unidbg.liac.apply_env.syscall;
 
 import com.github.unidbg.AndroidEmulator;
 import com.github.unidbg.arm.backend.Unicorn2Factory;
@@ -6,7 +6,6 @@ import com.github.unidbg.file.linux.AndroidFileIO;
 import com.github.unidbg.linux.android.AndroidARM64Emulator;
 import com.github.unidbg.linux.android.AndroidEmulatorBuilder;
 import com.github.unidbg.linux.android.AndroidResolver;
-import com.github.unidbg.linux.android.dvm.AbstractJni;
 import com.github.unidbg.linux.android.dvm.DalvikModule;
 import com.github.unidbg.linux.android.dvm.DvmClass;
 import com.github.unidbg.linux.android.dvm.VM;
@@ -16,8 +15,6 @@ import com.github.unidbg.unix.UnixSyscallHandler;
 import com.learn.unidbg.extend.SuperExtendAbstractJni;
 import com.learn.unidbg.extend.syscall.ExtendARM64SyscallHandler;
 import com.learn.unidbg.extend.utils.ExtendFileUtils;
-
-import java.io.File;
 
 public class SyscallDemo extends SuperExtendAbstractJni {
     private final AndroidEmulator emulator;

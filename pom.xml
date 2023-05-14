@@ -7,6 +7,7 @@
         <module>lilac-sample</module>
         <module>other-sample</module>
         <module>common-extend</module>
+        <module>famouse_app</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

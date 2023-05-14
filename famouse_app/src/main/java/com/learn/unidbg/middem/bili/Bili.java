@@ -1,4 +1,4 @@
-package com.learn.unidbg.liac.sample;
+package com.learn.unidbg.middem.bili;
 
 
 /*
@@ -48,7 +48,6 @@ import com.github.unidbg.linux.file.ByteArrayFileIO;
 import com.github.unidbg.memory.Memory;
 import com.learn.unidbg.extend.SuperExtendAbstractJni;
 import com.learn.unidbg.extend.utils.ExtendFileUtils;
-import com.learn.unidbg.liac.util.SignedQuery;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
@@ -95,12 +94,6 @@ public class Bili extends SuperExtendAbstractJni implements IOResolver {
         printApkInfo(vm);
 
     }
-
-
-
-
-
-
 
 
     @Override
