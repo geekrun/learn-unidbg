@@ -1,12 +1,26 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.learn.unidbg</groupId>
-        <artifactId>learn-unidbg</artifactId>
         <version>0.0.1-SNAPSHOT</version>
+        <artifactId>learn-unidbg</artifactId>
     </parent>
+    <version>0.0.1-SNAPSHOT</version>
+    <dependencies>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>10</source>
+                    <target>10</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <modelVersion>4.0.0</modelVersion>
     <artifactId>common-extend</artifactId>
-    <name>Archetype - common-extend</name>
-    <url>http://maven.apache.org</url>
+    <groupId>com.learn.unidbg</groupId>
 </project>

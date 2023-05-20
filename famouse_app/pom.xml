@@ -1,14 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.learn.unidbg</groupId>
-        <artifactId>learn-unidbg</artifactId>
         <version>0.0.1-SNAPSHOT</version>
+        <artifactId>learn-unidbg</artifactId>
     </parent>
-    <artifactId>famouse_app</artifactId>
-    <name>Archetype - famouse_app</name>
-    <url>http://maven.apache.org</url>
     <dependencies>
         <dependency>
             <groupId>com.learn.unidbg</groupId>
@@ -17,4 +13,20 @@
             <scope>compile</scope>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>10</source>
+                    <target>10</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>famouse_app</artifactId>
+    <groupId>com.learn.unidbg</groupId>
+
 </project>
